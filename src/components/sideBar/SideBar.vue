@@ -39,19 +39,6 @@
       </v-list-item>
       <v-list-item-group active-class="bgsidebar" v-model="selectItem" dark>
         <v-list nav dense>
-          <v-list-item
-            class="SelectedTile"
-            link
-            to="/"
-            style="height: 30px"
-          >
-            <v-list-item-icon style="margin-top: 8px">
-              <v-icon size="20"> mdi-book-open-page-variant </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <span style="font-weight: bold; font-size: 13px">Books</span>
-            </v-list-item-content>
-          </v-list-item>
 
           <v-list-item
               class="SelectedTile"
@@ -64,6 +51,19 @@
             </v-list-item-icon>
             <v-list-item-content>
               <span style="font-weight: bold; font-size: 13px">Authors</span>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+              class="SelectedTile"
+              link
+              to="/"
+              style="height: 30px"
+          >
+            <v-list-item-icon style="margin-top: 8px">
+              <v-icon size="20"> mdi-book-open-page-variant </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <span style="font-weight: bold; font-size: 13px">Books</span>
             </v-list-item-content>
           </v-list-item>
 

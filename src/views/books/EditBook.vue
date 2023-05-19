@@ -20,7 +20,7 @@
                 >
                   <v-text-field
                       dark
-                      v-model="name"
+                      v-model="items.name"
                       filled
                       label="Name"
                       dense
@@ -36,7 +36,7 @@
                 >
                   <v-text-field
                       dark
-                      v-model="genre"
+                      v-model="items.genre"
                       filled
                       label="Genre"
                       dense
@@ -56,7 +56,7 @@
                 >
                   <v-text-field
                       dark
-                      v-model="isbn"
+                      v-model="items.isbn"
                       filled
                       label="Isbn"
                       dense
@@ -71,7 +71,7 @@
                        cols="12"
                 >
                   <v-autocomplete
-                      v-model="value"
+                      v-model="items.genre"
                       :items="items"
                       dense
                       dark
@@ -89,7 +89,7 @@
                 >
                   <v-text-field
                       dark
-                      v-model="page_number"
+                      v-model="items.page_number"
                       filled
                       label="Page Number"
                       dense
@@ -111,8 +111,6 @@
               </v-row>
 
             </v-col>
-
-
 
 
             <v-card-actions style="margin-top: 5px">
@@ -148,94 +146,27 @@ export default {
   name: "CreateProject",
   data: () => ({
     image: false,
-    iconAlert: '',
-    textAlert: '',
-    colorAlert: '',
-    snackbar: false,
-    dialog: false,
-    sel: false,
-    selected: undefined,
-    cardInfoProjects: true,
-    alert: false,
-    loading: true,
-    packageId: '',
-    title: "",
-    slack: [""],
-    telegram: [""],
-    email: [""],
-    is_active: true,
-    textActive: 'enabled',
-    result: [],
-    package_list: [],
+    items: undefined,
   }),
 //======================================================================================================================
   methods: {
-    createProjects() {
-      this.snackbar = false
-      this.axios.post(`/projects`, {
-        title: this.title,
-        is_active: this.is_active,
-        notifications: {
-          telegram: this.telegram,
-          slack: this.slack,
-          email: this.email
-        }
-      }).then((res) => {
-        if (res.status === 200) {
-          this.snackbar = true
-          this.iconAlert = 'mdi-checkbox-marked-circle-outline'
-          this.textAlert = 'SUCCESS'
-          this.colorAlert = 'green'
-          setTimeout(() => {
-            this.$router.push("/overview");
-          }, 1500);
-        }
-      }).catch(() => {
-        this.snackbar = true
-        this.iconAlert = 'mdi-alert-outline'
-        this.textAlert = 'ERROR MASSAGE'
-        this.colorAlert = 'red'
-      })
-    },
+
 //======================================================================================================================
     onResize() {
       this.image = window.innerWidth < 960;
       this.image = this.image !== true;
     },
-//======================================================================================================================
-    switchName() {
-      if (this.is_active === false) {
-        this.textActive = 'Disabled'
-      } else {
-        this.textActive = 'Enabled'
-      }
-    },
-//======================================================================================================================
-    addEmail() {
-      this.email.push([]);
-    },
-    removeEmail(index) {
-      this.email.splice(index, 1);
-    },
-//======================================================================================================================
-    addTele() {
-      this.telegram.push([]);
-    },
-    removeTele(index) {
-      this.telegram.splice(index, 1);
-    },
-//======================================================================================================================
-    addSlack() {
-      this.slack.push([]);
-    },
-    removeSlack(index) {
-      this.slack.splice(index, 1);
-    },
+    getData() {
+      this.items = JSON.parse(this.$route.params.data)
+    }
   },
   mounted() {
     this.onResize();
     window.addEventListener("resize", this.onResize, {passive: true});
   },
+  created() {
+    this.getData()
+  }
 }
 </script>
 

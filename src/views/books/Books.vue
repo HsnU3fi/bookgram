@@ -4,7 +4,7 @@
 
       <v-row justify="center" align="center">
         <v-card-title style="color: white;margin-top: 20px">
-          <span class="text-h5">Books</span>
+          <span class="text-h6">Books</span>
         </v-card-title>
       </v-row>
       <v-row justify="start" align="start">
@@ -31,9 +31,8 @@
       <v-col md="12" cols="12">
 
         <v-data-table
-            @click:row="handleClick"
             :headers="headers"
-            :items="desserts"
+            :items="items"
             item-key="name"
             style="background-color: #2C2F37;"
             class="elevation-15"
@@ -52,19 +51,18 @@
                 label="Search (UPPER CASE ONLY)"
             ></v-text-field>
           </template>
-          <template v-slot:body.append>
-            <tr>
-              <td></td>
-              <td>
-                <v-text-field
-                    v-model="calories"
-                    type="number"
-                    label="Less than"
-                ></v-text-field>
-              </td>
-              <td colspan="4"></td>
-            </tr>
+
+          <template v-slot:item.view="{ item }">
+            <v-btn style="margin: 5px" fab small dark color="#F2C83A">
+              <v-icon
+                  small
+                  @click="viewItem(item)"
+              >
+                mdi-eye
+              </v-icon>
+            </v-btn>
           </template>
+
           <template v-slot:item.actions="{ item }">
             <v-btn style="margin: 5px" dark color="#55BE4C">
               <v-icon
@@ -78,23 +76,121 @@
             <v-btn style="margin: 5px" dark color="red">
               <v-icon
                   small
-                  @click="deleteItem(item)"
+                  class="mr-2"
+                  @click="deleteItem(item); dialogDelete=true"
               >
                 mdi-delete
               </v-icon>
             </v-btn>
-<!--            <v-btn style="margin: 5px" dark color="red">-->
-<!--              <v-icon-->
-<!--                  small-->
-<!--                  @click="deleteItem(item)"-->
-<!--              >-->
-<!--                mdi-delete-->
-<!--              </v-icon>-->
-<!--            </v-btn>-->
-           </template>
+
+
+          </template>
 
         </v-data-table>
       </v-col>
+      <v-row justify="center">
+
+        <v-dialog
+            persistent
+            v-model="dialog"
+            max-width="450"
+
+        >
+          <v-card color="#2C2F37">
+            <v-row justify="start" align="start">
+              <img loading="lazy" style="margin-left: 7%" width="100" height="200"
+                   src="../../assets/img/addbook.png"
+                   alt="">
+            </v-row>
+            <v-card-text class="text-h7 " style="color: white">
+              Book Name :
+              <span style="font-weight: bold;font-size: 15px;color: #35D01C">
+              {{ view_item.name || "----" }}
+            </span>
+            </v-card-text>
+
+            <v-card-text class="text-h7" style="color: white">
+              Author :
+              <span style="font-weight: bold;font-size: 13px;color: #35D01C">
+               {{ view_item.author }}
+               </span>
+            </v-card-text>
+            <v-card-text class="text-h7" style="color: white">
+              Page Number :
+              <span style="font-weight: bold;font-size: 13px;color: #35D01C">
+
+               {{ view_item.page_number }}
+               </span>
+
+            </v-card-text>
+            <v-card-text class="text-h7" style="color: white">
+              Genre :
+              <span style="font-weight: bold;font-size: 13px;color: #35D01C">
+                {{ view_item.genre }}
+               </span>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+
+              <v-btn
+                  color="#35D01C"
+                  text
+                  @click="dialog = false"
+              >
+                <span style="font-size: 15px;font-weight: bold">
+                  ok
+                </span>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+
+
+      <v-row justify="center">
+
+        <v-dialog
+            persistent
+            v-model="dialogDelete"
+            max-width="450"
+
+        >
+          <v-card height="160"
+                  color="#2C2F37"
+                  style="border: 2px solid #35D01C; border-radius: 8px"
+                  elevation="24">
+
+            <v-card-title>
+              <v-row
+                  style="margin-top: 20px; color: white"
+                  justify="center"
+                  align="center"
+              >
+            <span style="font-weight: bold; font-size: 80%">
+              Are you sure delete item
+              <strong style="color: #35D01C;; font-size: 100%"
+              >{{ delete_item.name || '---' }}</strong
+              >
+              ?
+            </span>
+              </v-row>
+            </v-card-title>
+            <v-card-actions style="margin-top: 20px">
+              <v-row justify="center" align="center">
+                <v-btn @click="dialogDelete = false" dark text width="75" color="red">
+                  <span style="font-weight: bold"> Cancel </span>
+                </v-btn>
+                <div style="width: 20px"></div>
+                <v-btn @click="acceptDelete" text dark width="80" color="#35D01C">
+                  <span style="font-weight: bold"> Yes </span>
+                </v-btn>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -107,89 +203,11 @@ export default {
   data() {
     return {
       search: '',
-      calories: '',
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: 1,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: 1,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: 7,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: 8,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: 16,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: 0,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: 2,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: 45,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: 22,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: 6,
-        },
-      ],
+      items: undefined,
+      dialog: false,
+      dialogDelete: false,
+      delete_item: '',
+      view_item: ''
     }
   },
   computed: {
@@ -202,25 +220,24 @@ export default {
           value: 'name',
         },
         {
-          text: 'Name',
+          text: 'Author',
           align: 'center',
           sortable: false,
-          value: 'name',
+          value: 'author',
         },
         {
-          text: 'Name',
+          text: 'Isbn',
           align: 'center',
           sortable: false,
-          value: 'name',
+          value: 'isbn',
         },
-        {
-          text: 'Name',
-          align: 'center',
-          sortable: false,
-          value: 'name',
-        },
+
         {
           text: 'Actions', value: 'actions', align: 'center',
+          sortable: false
+        },
+        {
+          text: 'view', value: 'view', align: 'center',
           sortable: false
         },
 
@@ -229,17 +246,25 @@ export default {
     },
   },
   methods: {
-      handleClick(row) {
-      // set active row and deselect others
-      this.desserts.map((item, index) => {
-        item.selected = item === row
+    editItem(item) {
+      window.location.href = "edit-book/" + JSON.stringify(item)
+    },
+    viewItem(item) {
+      this.view_item = item
+      this.dialog = true
 
-        this.$set(this.desserts, index, item)
-      })
+    },
+    deleteItem(item) {
+      this.dialogDelete = true
+      this.delete_item = item
+    },
+    acceptDelete(item) {
 
-      // or just do something with your current clicked row item data
-      console.log(row)
-      window.location.href = "edit-book/" +row
+    },
+
+    getItemLocalStorage() {
+      this.items = JSON.parse(localStorage.getItem('books'))
+
     },
     filterOnlyCapsText(value, search, item) {
       return value != null &&
@@ -248,6 +273,9 @@ export default {
           value.toString().toLocaleUpperCase().indexOf(search) !== -1
     },
   },
+  created() {
+    this.getItemLocalStorage()
+  }
 }
 </script>
 

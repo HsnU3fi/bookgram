@@ -4,7 +4,7 @@
                  fluid>
       <v-row justify="center" align="center">
         <v-card-title style="color: white;margin-top: 20px">
-          <span class="text-h5">Add Book</span>
+          <span class="text-h5">Add Author</span>
         </v-card-title>
       </v-row>
       <v-row justify="start" align="start" style="padding: 20px">
@@ -14,15 +14,14 @@
             <v-col md="12" cols="12">
 
 
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
+                <v-col md="12"
                        cols="12"
                 >
                   <v-text-field
                       dark
-                      v-model="name"
+                      v-model="full_name"
                       filled
-                      label="Name"
+                      label="Full Name"
                       dense
                       color="#55BE4C"
 
@@ -31,81 +30,14 @@
                   </v-text-field>
 
                 </v-col>
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      dark
-                      v-model="genre"
-                      filled
-                      label="Genre"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-                </v-col>
-
-              </v-row>
 
 
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      dark
-                      v-model="isbn"
-                      filled
-                      label="Isbn"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-autocomplete
-                      v-model="author"
-                      :items="authors"
-                      dense
-                      dark
-                      filled
-                      label="genre"
-                  ></v-autocomplete>
-
-                </v-col>
-
-              </v-row>
-
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      dark
-                      v-model="page_number"
-                      filled
-                      label="Page Number"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-                <v-col md="6"
+                <v-col md="12"
                        cols="12"
                 >
 
                   <v-file-input
-                      v-model="image_book"
+                      v-model="image_author"
 
                       label="File input"
                       placeholder="Select your image"
@@ -118,7 +50,8 @@
 
                 </v-col>
 
-              </v-row>
+
+
 
             </v-col>
 
@@ -142,7 +75,7 @@
         </v-col>
         <v-col md="6" cols="12">
           <img v-if="image" loading="lazy" style="margin-left: 7%" width="90%" height="600"
-               src="../../assets/img/addbook.png"
+               src="../../assets/img/addAuthor.png"
                alt="">
         </v-col>
       </v-row>
@@ -156,14 +89,9 @@ export default {
   data: () => ({
     text: "",
     image: false,
-    name: "",
-    genre: "",
-    page_number: "",
-    authors: "",
-    author: "",
-    isbn: "",
-    image_book: undefined,
-    books: [],
+    full_name: "",
+    image_author: undefined,
+    authors: [],
 
   }),
 //======================================================================================================================
@@ -184,26 +112,15 @@ export default {
 //       console.log(this.img)
 //       reader.readAsDataURL(this.image_book)
 
-     this.books.push( {
-        "name": this.name,
-        "author": this.author,
-        "genre": this.genre,
-        "isbn": this.isbn,
-        "page_number": this.page_number,
+      this.authors.push( {
+        "full_name": this.full_name,
+
       })
-      localStorage.setItem("books", JSON.stringify(this.books));
+      localStorage.setItem("authors", JSON.stringify(this.authors));
 
     },
 
-//======================================================================================================================
-    getItemLocalStorage() {
-      let getItem = JSON.parse(localStorage.getItem('books'))
-      if (getItem.length > 0) {
-        for (let i in getItem) {
-          this.books.push(getItem[i])
-        }
-      }
-    },
+
 //======================================================================================================================
     onResize() {
       this.image = window.innerWidth < 960;
@@ -211,9 +128,7 @@ export default {
     },
 //======================================================================================================================
   },
-  created() {
-    this.getItemLocalStorage()
-  },
+
   mounted() {
     this.onResize();
     window.addEventListener("resize", this.onResize, {passive: true});

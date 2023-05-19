@@ -4,6 +4,8 @@ import Books from '../views/books/Books'
 import AddBook from '../views/books/AddBook'
 import EditBook from '../views/books/EditBook'
 import Authors from '../views/authors/Authors'
+import EditAuthors from '../views/authors/EditAuthors'
+import AddAuthors from '../views/authors/AddAuthor'
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,16 @@ const routes = [
     path: '/authors',
     name: 'Authors',
     component: Authors
+  },
+  {
+    path: '/edit-authors/:data',
+    name: 'EditAuthors',
+    component: EditAuthors
+  },
+  {
+    path: '/add-authors',
+    name: 'AddAuthors',
+    component: AddAuthors
   },
 ]
 
