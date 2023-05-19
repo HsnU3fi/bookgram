@@ -42,7 +42,7 @@
           <v-list-item
             class="SelectedTile"
             link
-            to="/books"
+            to="/"
             style="height: 30px"
           >
             <v-list-item-icon style="margin-top: 8px">
@@ -89,35 +89,10 @@ export default {
   //======================================================================================================================
   mounted() {
     const pathname = window.location.pathname;
-    if (pathname === "/datacenters") {
-      this.selectItem = 2;
-    } else if (pathname === "/overview" || pathname === "/newProject") {
+    if (pathname === "/") {
       this.selectItem = 0;
-    } else if (pathname === "/notifications") {
-      this.selectItem = 6;
-    } else if (pathname === "/setting" || pathname === "/updateProject") {
-      this.selectItem = 7;
-    } else if (
-      pathname === "/endpointchart" ||
-      pathname === "/ping" ||
-      pathname === "/Traceroute" ||
-      pathname === "/netcat"
-    ) {
-      this.selectItem = 3;
-    } else if (
-      pathname === "/registerRulesTraceRoute" ||
-      pathname === "/registerRulesPing" ||
-      pathname === "/registerRulesNetCat" ||
-      pathname === "/registerRulesEndpoint" ||
-      pathname === "/registerRules"
-    ) {
-      this.selectItem = 3;
-    } else if (pathname === "/Membership") {
-      this.selectItem = 5;
     } else if (pathname === "/") {
       this.selectItem = 1;
-    } else if (pathname === "/Logs") {
-      this.selectItem = 4;
     }
   },
 };
@@ -125,11 +100,11 @@ export default {
 <style lang="scss">
 .SelectedTile:hover {
   border-radius: 4px;
-  background-color: #f2c83a;
+  background-color: #55BE4C;
 }
 
 .bgsidebar {
-  background-color: #f2c83a;
+  background-color: #55BE4C;
 }
 .v-navigation-drawer--mini-variant,
 .v-navigation-drawer {

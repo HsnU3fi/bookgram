@@ -5,15 +5,21 @@
       <router-view />
     </v-main>
     <Footer />
+<!--    <loading :value="true"/>-->
+
   </v-app>
 </template>
 <script>
 import AppBar from "@/components/appBar/AppBar";
 import Footer from "@/components/footer/Footer";
+// import Loading from "@/components/loading/Loding";
+
 
 export default {
   name: "App",
-  components: { AppBar, Footer },
+  components: { AppBar, Footer,
+    // Loading
+  },
 
 };
 

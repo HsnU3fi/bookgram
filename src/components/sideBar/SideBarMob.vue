@@ -7,7 +7,7 @@
         app
         dark
         color="#2C2F37"
-        width="80%"
+        width="85%"
     >
       <v-row style="margin: 15px;" justify="end" align="end">
         <v-btn icon right @click="drawer=false">
@@ -22,145 +22,37 @@
           v-model="selectItem"
           dark
       >
+
+
         <v-list nav dense>
+          <v-list-item
+              class="SelectedTile"
+              link
+              to="/books"
+              style="height: 30px"
+          >
+            <v-list-item-icon style="margin-top: 8px">
+              <v-icon size="20"> mdi-book-open-page-variant </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <span style="font-weight: bold; font-size: 13px">Books</span>
+            </v-list-item-content>
+          </v-list-item>
 
           <v-list-item
               class="SelectedTile"
               link
-              href="/overview"
+              to="/authors"
               style="height: 30px"
           >
-
             <v-list-item-icon style="margin-top: 8px">
-              <v-icon size="20">
-                mdi-folder
-              </v-icon>
+              <v-icon size="20"> mdi-account </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <span style="font-weight: bold; font-size: 15px;">{{ this.$nameProjecti }}</span>
+              <span style="font-weight: bold; font-size: 13px">Authors</span>
             </v-list-item-content>
-
           </v-list-item>
-          <div v-if="this.$falgProject">
 
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/datacenters"
-                style="height: 30px;margin-top: 8px"
-            >
-
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-database
-                </v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">data centers</span>
-              </v-list-item-content>
-
-            </v-list-item>
-
-
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/"
-                style="height: 30px"
-            >
-
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-view-dashboard
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">{{ $t('sideBar.dashboard') }}</span>
-              </v-list-item-content>
-
-            </v-list-item>
-
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/registerRules"
-                style="height: 30px;margin-top: 8px"
-            >
-
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-checkbox-multiple-marked
-                </v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">{{ $t('sideBar.register') }}</span>
-              </v-list-item-content>
-
-            </v-list-item>
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/Logs"
-                style="height: 30px"
-            >
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-view-dashboard
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">Logs</span>
-              </v-list-item-content>
-
-            </v-list-item>
-
-
-
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/Membership"
-                style="height: 20px;margin-top: 8px"
-            >
-
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-package-variant-closed
-                </v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">Membership</span>
-              </v-list-item-content>
-
-            </v-list-item>
-
-
-
-
-
-            <v-list-item
-                link
-                class="SelectedTile"
-                href="/updateProject"
-                style="height: 30px;"
-            >
-
-              <v-list-item-icon style="margin-top: 8px">
-                <v-icon size="20">
-                  mdi-cog-outline
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <span style="font-weight: bold; font-size: 15px;">{{ $t('sideBar.setting') }}</span>
-              </v-list-item-content>
-            </v-list-item>
-            <div style="background-color: #FFF">
-              <v-divider style="margin-top: 30px"/>
-            </div>
-          </div>
         </v-list>
 
       </v-list-item-group>
@@ -211,11 +103,11 @@ export default {
 <style lang="scss">
 .SelectedTile:hover {
   border-radius: 4px;
-  background-color: #e6b71c;
+  background-color: #55BE4C;
 }
 
 .bgsidebar {
-  background-color: #e6b71c;
+  background-color: #55BE4C;
 }
 
 .v-navigation-drawer--mini-variant, .v-navigation-drawer {

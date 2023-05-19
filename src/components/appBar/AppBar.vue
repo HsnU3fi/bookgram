@@ -13,14 +13,14 @@
 
         <v-icon
             size="30"
-            color="#F2C83A"
+            color="#55BE4C"
             @click.stop="drawer = !drawer"
             v-if="isXs"
         >
           mdi-menu
         </v-icon>
 
-      <img style="margin-top: 25px" width="120" v-if="Image" src="../../assets/img/logo.png" alt=""/>
+      <img style="margin-top: 10px;margin-left: -35px" width="210" v-if="Image" src="../../assets/img/logo0.png" alt=""/>
 
       <v-spacer/>
     </v-app-bar>

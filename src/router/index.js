@@ -1,24 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Books from '../views/books/Books'
+import AddBook from '../views/books/AddBook'
+import Authors from '../views/authors/Authors'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Books',
+    component: Books
   },
   {
-    path: '/books',
-    name: 'Books',
-    component: Home
+    path: '/add-book',
+    name: 'AddBook',
+    component: AddBook
   },
   {
     path: '/authors',
     name: 'Authors',
-    component: Home
+    component: Authors
   },
 ]
 
