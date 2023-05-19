@@ -28,42 +28,73 @@
         </v-btn>
 
       </v-row>
-    <v-col md="12" cols="12">
+      <v-col md="12" cols="12">
 
-    <v-data-table
-        :headers="headers"
-        :items="desserts"
-        item-key="name"
-        style="background-color: #2C2F37;"
-        class="elevation-15"
-        :search="search"
-        :custom-filter="filterOnlyCapsText"
-        loading-text="loading...."
-        dark
-        hide-default-footer
-    >
-      <template v-slot:top>
-        <v-text-field
-            v-model="search"
-            label="Search (UPPER CASE ONLY)"
-            class="mx-4"
-        ></v-text-field>
-      </template>
-      <template v-slot:body.append>
-        <tr>
-          <td></td>
-          <td>
+        <v-data-table
+            @click:row="handleClick"
+            :headers="headers"
+            :items="desserts"
+            item-key="name"
+            style="background-color: #2C2F37;"
+            class="elevation-15"
+            :search="search"
+            color="#55BE4C"
+            loading-text="loading...."
+            dark
+            hide-default-footer
+        >
+          <template v-slot:top>
             <v-text-field
-                v-model="calories"
-                type="number"
-                label="Less than"
+                v-model="search"
+                filled
+                dense
+                color="#55BE4C"
+                label="Search (UPPER CASE ONLY)"
             ></v-text-field>
-          </td>
-          <td colspan="4"></td>
-        </tr>
-      </template>
-    </v-data-table>
-    </v-col>
+          </template>
+          <template v-slot:body.append>
+            <tr>
+              <td></td>
+              <td>
+                <v-text-field
+                    v-model="calories"
+                    type="number"
+                    label="Less than"
+                ></v-text-field>
+              </td>
+              <td colspan="4"></td>
+            </tr>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-btn style="margin: 5px" dark color="#55BE4C">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+            <v-btn style="margin: 5px" dark color="red">
+              <v-icon
+                  small
+                  @click="deleteItem(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </v-btn>
+<!--            <v-btn style="margin: 5px" dark color="red">-->
+<!--              <v-icon-->
+<!--                  small-->
+<!--                  @click="deleteItem(item)"-->
+<!--              >-->
+<!--                mdi-delete-->
+<!--              </v-icon>-->
+<!--            </v-btn>-->
+           </template>
+
+        </v-data-table>
+      </v-col>
     </v-container>
   </div>
 </template>
@@ -73,7 +104,7 @@
 
 export default {
 
-    data () {
+  data() {
     return {
       search: '',
       calories: '',
@@ -162,7 +193,7 @@ export default {
     }
   },
   computed: {
-    headers () {
+    headers() {
       return [
         {
           text: 'Name',
@@ -188,12 +219,29 @@ export default {
           sortable: false,
           value: 'name',
         },
+        {
+          text: 'Actions', value: 'actions', align: 'center',
+          sortable: false
+        },
+
 
       ]
     },
   },
   methods: {
-    filterOnlyCapsText (value, search, item) {
+      handleClick(row) {
+      // set active row and deselect others
+      this.desserts.map((item, index) => {
+        item.selected = item === row
+
+        this.$set(this.desserts, index, item)
+      })
+
+      // or just do something with your current clicked row item data
+      console.log(row)
+      window.location.href = "edit-book/" +row
+    },
+    filterOnlyCapsText(value, search, item) {
       return value != null &&
           search != null &&
           typeof value === 'string' &&

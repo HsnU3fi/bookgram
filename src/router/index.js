@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Books from '../views/books/Books'
 import AddBook from '../views/books/AddBook'
+import EditBook from '../views/books/EditBook'
 import Authors from '../views/authors/Authors'
 
 Vue.use(VueRouter)
@@ -16,6 +17,11 @@ const routes = [
     path: '/add-book',
     name: 'AddBook',
     component: AddBook
+  },
+  {
+    path: '/edit-book/:data',
+    name: 'EditBook',
+    component: EditBook
   },
   {
     path: '/authors',

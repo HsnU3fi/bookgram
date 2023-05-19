@@ -4,7 +4,7 @@
                  fluid>
       <v-row justify="center" align="center">
         <v-card-title style="color: white;margin-top: 20px">
-          <span class="text-h5">Add Book</span>
+          <span class="text-h5">Edit Book</span>
         </v-card-title>
       </v-row>
       <v-row justify="start" align="start" style="padding: 20px">
@@ -71,8 +71,8 @@
                        cols="12"
                 >
                   <v-autocomplete
-                      v-model="author"
-                      :items="authors"
+                      v-model="value"
+                      :items="items"
                       dense
                       dark
                       filled
@@ -103,8 +103,7 @@
                 <v-col md="6"
                        cols="12"
                 >
-                  <v-file-input v-model="image_book"  dark filled dense color="#55BE4C" clearable
-                                label="Image "></v-file-input>
+                  <v-file-input dark filled dense color="#55BE4C" clearable label="Image "></v-file-input>
 
 
                 </v-col>
@@ -112,6 +111,8 @@
               </v-row>
 
             </v-col>
+
+
 
 
             <v-card-actions style="margin-top: 5px">
@@ -122,11 +123,11 @@
                   width="80"
                   color="#55BE4C"
                   style="margin-right: 10px"
-                  @click="saveBookInLocalStorage()"
+                  @click="createProjects()"
               >
-              <span style="font-weight: bold">
-                Submit
-              </span>
+<span style="font-weight: bold">
+  Submit
+</span>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -144,27 +145,57 @@
 <script>
 
 export default {
+  name: "CreateProject",
   data: () => ({
     image: false,
-    name: undefined,
-    genre: undefined,
-    page_number: undefined,
-    authors: undefined,
-    author: undefined,
-    isbn: undefined,
-    image_book: undefined,
-    books: undefined,
+    iconAlert: '',
+    textAlert: '',
+    colorAlert: '',
+    snackbar: false,
+    dialog: false,
+    sel: false,
+    selected: undefined,
+    cardInfoProjects: true,
+    alert: false,
+    loading: true,
+    packageId: '',
+    title: "",
+    slack: [""],
+    telegram: [""],
+    email: [""],
+    is_active: true,
+    textActive: 'enabled',
+    result: [],
+    package_list: [],
   }),
 //======================================================================================================================
   methods: {
-    saveBookInLocalStorage() {
-      console.log('salam')
-      console.log(this.image_book)
-      this.books = [this.genre, this.isbn, this.page_number, this.name, this.author]
-      console.log('this.books')
-      console.log(this.books)
-      // localStorage.setItem("books", JSON.stringify(this.books));
-
+    createProjects() {
+      this.snackbar = false
+      this.axios.post(`/projects`, {
+        title: this.title,
+        is_active: this.is_active,
+        notifications: {
+          telegram: this.telegram,
+          slack: this.slack,
+          email: this.email
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          this.snackbar = true
+          this.iconAlert = 'mdi-checkbox-marked-circle-outline'
+          this.textAlert = 'SUCCESS'
+          this.colorAlert = 'green'
+          setTimeout(() => {
+            this.$router.push("/overview");
+          }, 1500);
+        }
+      }).catch(() => {
+        this.snackbar = true
+        this.iconAlert = 'mdi-alert-outline'
+        this.textAlert = 'ERROR MASSAGE'
+        this.colorAlert = 'red'
+      })
     },
 //======================================================================================================================
     onResize() {
@@ -172,6 +203,34 @@ export default {
       this.image = this.image !== true;
     },
 //======================================================================================================================
+    switchName() {
+      if (this.is_active === false) {
+        this.textActive = 'Disabled'
+      } else {
+        this.textActive = 'Enabled'
+      }
+    },
+//======================================================================================================================
+    addEmail() {
+      this.email.push([]);
+    },
+    removeEmail(index) {
+      this.email.splice(index, 1);
+    },
+//======================================================================================================================
+    addTele() {
+      this.telegram.push([]);
+    },
+    removeTele(index) {
+      this.telegram.splice(index, 1);
+    },
+//======================================================================================================================
+    addSlack() {
+      this.slack.push([]);
+    },
+    removeSlack(index) {
+      this.slack.splice(index, 1);
+    },
   },
   mounted() {
     this.onResize();
