@@ -22,13 +22,26 @@
           v-model="selectItem"
           dark
       >
+        <v-list-item
+            class="SelectedTile"
+            link
+            to="/"
+            style="height: 30px"
+        >
+          <v-list-item-icon style="margin-top: 8px">
+            <v-icon size="20"> mdi-account </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <span style="font-weight: bold; font-size: 13px">Authors</span>
+          </v-list-item-content>
+        </v-list-item>
 
 
         <v-list nav dense>
           <v-list-item
               class="SelectedTile"
               link
-              to="/books"
+              to="/book"
               style="height: 30px"
           >
             <v-list-item-icon style="margin-top: 8px">
@@ -39,19 +52,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item
-              class="SelectedTile"
-              link
-              to="/authors"
-              style="height: 30px"
-          >
-            <v-list-item-icon style="margin-top: 8px">
-              <v-icon size="20"> mdi-account </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <span style="font-weight: bold; font-size: 13px">Authors</span>
-            </v-list-item-content>
-          </v-list-item>
 
         </v-list>
 
@@ -78,22 +78,10 @@ export default {
 //======================================================================================================================
   mounted() {
     const pathname = window.location.pathname;
-    if (pathname === '/datacenters') {
-      this.selectItem = 1
-    } else if (pathname === "/overview" || pathname === "/newProject") {
-      this.selectItem = 0
-    } else if (pathname === "/setting"||pathname === "/updateProject") {
-      this.selectItem = 6
-    } else if (pathname === "/endpointchart" || pathname === "/ping"|| pathname === "/Traceroute"|| pathname === "/netcat") {
-      this.selectItem = 2
-    }else if (pathname === "/registerRulesTraceRoute" || pathname === "/registerRulesPing"|| pathname === "/registerRulesNetCat"|| pathname === "/registerRulesEndpoint" || pathname === "/registerRules") {
-      this.selectItem = 3
-    }else if (pathname === "/Membership") {
-      this.selectItem = 5
-    }else if (pathname === "/") {
-      this.selectItem = 2
-    }else if (pathname === "/Logs") {
-      this.selectItem = 4
+    if (pathname === "/" || pathname === "/add-authors" || pathname === "/edit-authors") {
+      this.selectItem = 0;
+    } else if (pathname === "/book" || pathname === "/add-book" || pathname === "/edit-book") {
+      this.selectItem = 1;
     }
   },
 

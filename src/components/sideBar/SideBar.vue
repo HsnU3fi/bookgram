@@ -43,7 +43,7 @@
           <v-list-item
               class="SelectedTile"
               link
-              to="/authors"
+              to="/"
               style="height: 30px"
           >
             <v-list-item-icon style="margin-top: 8px">
@@ -56,7 +56,7 @@
           <v-list-item
               class="SelectedTile"
               link
-              to="/"
+              to="/book"
               style="height: 30px"
           >
             <v-list-item-icon style="margin-top: 8px">
@@ -89,9 +89,9 @@ export default {
   //======================================================================================================================
   mounted() {
     const pathname = window.location.pathname;
-    if (pathname === "/") {
+    if (pathname === "/" || pathname === "/add-authors" || pathname === "/edit-authors") {
       this.selectItem = 0;
-    } else if (pathname === "/") {
+    } else if (pathname === "/book" || pathname === "/add-book" || pathname === "/edit-book") {
       this.selectItem = 1;
     }
   },

@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/book',
     name: 'Books',
     component: Books
   },
@@ -26,7 +26,7 @@ const routes = [
     component: EditBook
   },
   {
-    path: '/authors',
+    path: '/',
     name: 'Authors',
     component: Authors
   },

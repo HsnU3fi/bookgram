@@ -71,12 +71,14 @@
                        cols="12"
                 >
                   <v-autocomplete
-                      v-model="items.genre"
-                      :items="items"
+                      v-model="items.author"
+                      :items="items_author"
+                      item-text="full_name"
+                      item-value="full_name"
                       dense
                       dark
                       filled
-                      label="genre"
+                      label="Author"
                   ></v-autocomplete>
 
                 </v-col>
@@ -147,10 +149,18 @@ export default {
   data: () => ({
     image: false,
     items: undefined,
+    items_author:[]
   }),
 //======================================================================================================================
   methods: {
+    getItemAuthor() {
+      console.log('this.items_author')
 
+      this.items_author = JSON.parse(localStorage.getItem('authors'))
+      console.log(this.items_author)
+      console.log('this.items_author')
+
+    },
 //======================================================================================================================
     onResize() {
       this.image = window.innerWidth < 960;
@@ -165,6 +175,7 @@ export default {
     window.addEventListener("resize", this.onResize, {passive: true});
   },
   created() {
+    this.getItemAuthor()
     this.getData()
   }
 }
