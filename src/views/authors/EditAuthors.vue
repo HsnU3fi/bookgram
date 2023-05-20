@@ -19,7 +19,7 @@
               >
                 <v-text-field
                     dark
-                    v-model="items.full_name"
+                    v-model="full_name"
                     filled
                     label="Full Name"
                     dense
@@ -38,7 +38,6 @@
 
                 <v-file-input
                     v-model="image_author"
-
                     label="File input"
                     placeholder="Select your image"
                     prepend-icon="mdi-camera"
@@ -49,8 +48,6 @@
 
 
               </v-col>
-
-
 
 
             </v-col>
@@ -88,43 +85,57 @@
 export default {
   data: () => ({
     text: "",
-    items:undefined,
+    items: undefined,
     image: false,
     full_name: "",
     image_author: undefined,
     authors: [],
+    edit_item: undefined
 
   }),
 //======================================================================================================================
   methods: {
     saveBookInLocalStorage() {
-//       console.log('this.name')
-//       console.log(this.name)
-//       const reader = new FileReader();
-//       let baseString;
-//       reader.onloadend = function () {
-//         baseString = reader.result;
-//         console.log(baseString)
-//         this.img=baseString
-//       };
-// console.log(baseString)
-//       this.img = baseString
-//       console.log('this.img')
-//       console.log(this.img)
-//       reader.readAsDataURL(this.image_book)
+      this.getBase64(this.image_author).then(
+          profile_picture =>
+              this.authors.push({
+                "id": this.edit_item.id,
+                "full_name": this.full_name,
+                "profile_picture": profile_picture || "Null"
+              }),
+      )
+      setTimeout(() => {
+        localStorage.setItem("authors", JSON.stringify(this.authors))
 
-      this.authors.push( {
-        "full_name": this.full_name,
-
-      })
-      localStorage.setItem("authors", JSON.stringify(this.authors));
+      }, 1000)
 
     },
 
+
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
+
+//======================================================================================================================
+    deleteItem() {
+      this.items.splice(this.delete_item, 1)
+
+    },
 //======================================================================================================================
     getData() {
       this.items = JSON.parse(localStorage.getItem('authors'))
-
+      for (let i in this.items) {
+        if (this.items[i].id === this.$route.params.id) {
+          this.edit_item = this.items[i]
+          this.full_name = this.items[i].full_name
+          this.image_author = this.items[i].image_author
+        }
+      }
     },
 //======================================================================================================================
     onResize() {

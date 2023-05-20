@@ -70,6 +70,7 @@
                 <v-col md="6"
                        cols="12"
                 >
+
                   <v-autocomplete
                       v-model="author"
                       :items="items_author"
@@ -102,13 +103,14 @@
                   </v-text-field>
 
                 </v-col>
+
                 <v-col md="6"
                        cols="12"
                 >
 
                   <v-file-input
                       v-model="image_book"
-
+                      accept="image/png, image/jpeg, image/bmp"
                       label="File input"
                       placeholder="Select your image"
                       prepend-icon="mdi-camera"
@@ -155,6 +157,8 @@
 <script>
 
 export default {
+
+
   data: () => ({
     text: "",
     image: false,
@@ -165,39 +169,36 @@ export default {
     author: "",
     isbn: "",
     image_book: undefined,
-    items_author:[],
+    items_author: [],
     books: [],
 
   }),
 //======================================================================================================================
   methods: {
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
     saveBookInLocalStorage() {
-//       console.log('this.name')
-//       console.log(this.name)
-//       const reader = new FileReader();
-//       let baseString;
-//       reader.onloadend = function () {
-//         baseString = reader.result;
-//         console.log(baseString)
-//         this.img=baseString
-//       };
-// console.log(baseString)
-//       this.img = baseString
-//       console.log('this.img')
-//       console.log(this.img)
-//       reader.readAsDataURL(this.image_book)
+      this.getBase64(this.image_book).then(
+          img => this.books.push({
+            "id": Math.random().toString(16).slice(2),
+            "name": this.name,
+            "img": img,
+            "author": this.author,
+            "genre": this.genre,
+            "isbn": this.isbn,
+            "page_number": this.page_number,
+          }),
+      );
+      setTimeout(() => {
+        localStorage.setItem("books", JSON.stringify(this.books))
 
-
-      this.books.push({
-        "id": Math.random().toString(16).slice(2),
-        "name": this.name,
-        "author": this.author,
-        "genre": this.genre,
-        "isbn": this.isbn,
-        "page_number": this.page_number,
-      })
-      localStorage.setItem("books", JSON.stringify(this.books));
-
+      }, 1000)
     },
 
 //======================================================================================================================

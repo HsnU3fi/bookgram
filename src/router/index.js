@@ -21,7 +21,7 @@ const routes = [
     component: AddBook
   },
   {
-    path: '/edit-book/:data',
+    path: '/edit-book/:id',
     name: 'EditBook',
     component: EditBook
   },
@@ -31,7 +31,7 @@ const routes = [
     component: Authors
   },
   {
-    path: '/edit-authors/:data',
+    path: '/edit-authors/:id',
     name: 'EditAuthors',
     component: EditAuthors
   },

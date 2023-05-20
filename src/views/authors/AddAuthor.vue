@@ -14,43 +14,40 @@
             <v-col md="12" cols="12">
 
 
-                <v-col md="12"
-                       cols="12"
-                >
-                  <v-text-field
-                      dark
-                      v-model="full_name"
-                      filled
-                      label="Full Name"
-                      dense
-                      color="#55BE4C"
+              <v-col md="12"
+                     cols="12"
+              >
+                <v-text-field
+                    dark
+                    v-model="full_name"
+                    filled
+                    label="Full Name"
+                    dense
+                    color="#55BE4C"
 
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-
-
-                <v-col md="12"
-                       cols="12"
                 >
 
-                  <v-file-input
-                      v-model="image_author"
+                </v-text-field>
 
-                      label="File input"
-                      placeholder="Select your image"
-                      prepend-icon="mdi-camera"
-                      dark filled dense color="#55BE4C" clearable
-                      :show-size="100"
-                  >
-                  </v-file-input>
+              </v-col>
 
 
-                </v-col>
+              <v-col md="12"
+                     cols="12"
+              >
+
+                <v-file-input
+                    v-model="image_author"
+                    label="File input"
+                    placeholder="Select your image"
+                    prepend-icon="mdi-camera"
+                    dark filled dense color="#55BE4C" clearable
+                    :show-size="100"
+                >
+                </v-file-input>
 
 
+              </v-col>
 
 
             </v-col>
@@ -96,30 +93,43 @@ export default {
   }),
 //======================================================================================================================
   methods: {
+
     saveBookInLocalStorage() {
-//       console.log('this.name')
-//       console.log(this.name)
-//       const reader = new FileReader();
-//       let baseString;
-//       reader.onloadend = function () {
-//         baseString = reader.result;
-//         console.log(baseString)
-//         this.img=baseString
-//       };
-// console.log(baseString)
-//       this.img = baseString
-//       console.log('this.img')
-//       console.log(this.img)
-//       reader.readAsDataURL(this.image_book)
+      this.getBase64(this.image_author).then(
+          profile_picture =>
+              this.authors.push({
+                "id": Math.random().toString(16).slice(2),
+                "full_name": this.full_name,
+                "profile_picture": profile_picture
+              }),
+      )
+      setTimeout(() => {
+        localStorage.setItem("authors", JSON.stringify(this.authors))
 
-      this.authors.push( {
-        "full_name": this.full_name,
-
-      })
-      localStorage.setItem("authors", JSON.stringify(this.authors));
+      }, 1000)
 
     },
 
+
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
+
+//======================================================================================================================
+    getItemLocalStorage() {
+      let getItem = JSON.parse(localStorage.getItem('authors'))
+      if (getItem.length > 0) {
+        for (let i in getItem) {
+          this.authors.push(getItem[i])
+          console.log("test test")
+        }
+      }
+    },
 
 //======================================================================================================================
     onResize() {
@@ -133,6 +143,9 @@ export default {
     this.onResize();
     window.addEventListener("resize", this.onResize, {passive: true});
   },
+  created() {
+    this.getItemLocalStorage()
+  }
 }
 </script>
 

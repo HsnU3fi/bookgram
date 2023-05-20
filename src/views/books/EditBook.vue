@@ -167,7 +167,7 @@ export default {
       this.image = this.image !== true;
     },
     getData() {
-      this.items = JSON.parse(this.$route.params.data)
+      this.items = JSON.parse(this.$route.params.id)
     }
   },
   mounted() {

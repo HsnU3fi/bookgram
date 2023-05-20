@@ -99,11 +99,11 @@
         >
           <v-card color="#2C2F37">
             <v-row justify="start" align="start">
-              <img loading="lazy" style="margin-left: 7%" width="100" height="200"
-                   src="../../assets/img/addbook.png"
+              <img loading="lazy" style="margin-left: 7%;padding-top: 20px" width="150" height="200"
+                   :src="view_item.img"
                    alt="">
             </v-row>
-            <v-card-text class="text-h7 " style="color: white;padding-top: 10px">
+            <v-card-text class="text-h7 " style="color: white;padding-top: 20px">
               Book Name :
               <span style="font-weight: bold;font-size: 15px;color: #35D01C">
               {{ view_item.name || "----" }}
@@ -257,7 +257,7 @@ export default {
   },
   methods: {
     editItem(item) {
-      window.location.href = "edit-book/" + JSON.stringify(item)
+      window.location.href = "edit-book/" + item.id
     },
     viewItem(item) {
       this.view_item = item
