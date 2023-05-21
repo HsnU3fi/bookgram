@@ -1,5 +1,4 @@
 # bookgram
-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
 
 
 ## Project setup

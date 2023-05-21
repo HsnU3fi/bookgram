@@ -11,6 +11,7 @@
 
         <v-col md="6" cols="12">
           <v-card color="#2C2F37" style="border-radius: 6px" height="600" class="scroll">
+
             <v-col md="12" cols="12">
 
 
@@ -19,8 +20,9 @@
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
-                      v-model="items.name"
+                      v-model="name"
                       filled
                       label="Name"
                       dense
@@ -35,8 +37,9 @@
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
-                      v-model="items.genre"
+                      v-model="genre"
                       filled
                       label="Genre"
                       dense
@@ -45,53 +48,17 @@
                   >
 
                   </v-text-field>
+
                 </v-col>
-
               </v-row>
-
-
               <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
+                <v-col md="4"
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
-                      v-model="items.isbn"
-                      filled
-                      label="Isbn"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-autocomplete
-                      v-model="items.author"
-                      :items="items_author"
-                      item-text="full_name"
-                      item-value="full_name"
-                      dense
-                      dark
-                      filled
-                      label="Author"
-                  ></v-autocomplete>
-
-                </v-col>
-
-              </v-row>
-
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      dark
-                      v-model="items.page_number"
+                      v-model="page_number"
                       filled
                       label="Page Number"
                       dense
@@ -102,20 +69,62 @@
                   </v-text-field>
 
                 </v-col>
-                <v-col md="6"
+                <v-col md="4"
                        cols="12"
                 >
-                  <v-file-input dark filled dense color="#55BE4C" clearable label="Image "></v-file-input>
+                  <v-text-field
+                      :rules="[FieldValid.required]"
+                      dark
+                      v-model="isbn"
+                      filled
+                      label="Isbn"
+                      dense
+                      color="#55BE4C"
+                  >
 
+                  </v-text-field>
 
                 </v-col>
+                <v-col md="4"
+                       cols="12"
+                >
 
+                  <v-autocomplete
+                      :rules="[FieldValid.required]"
+                      v-model="author"
+                      :items="items_author"
+                      item-text="full_name"
+                      item-value="full_name"
+                      dense
+                      dark
+                      filled
+                      label="book"
+                  ></v-autocomplete>
+
+                </v-col>
               </v-row>
-
+              <v-row justify="center" align="center">
+                <v-col md="12"
+                       cols="12"
+                >
+                  <v-file-input
+                      :rules="PicValid"
+                      v-model="image_book"
+                      @change="onFileChange"
+                      label="File input"
+                      accept="image/png, image/jpeg, image/bmp"
+                      placeholder="Select your image"
+                      prepend-icon="mdi-camera"
+                      dark filled dense color="#55BE4C" clearable
+                  >
+                  </v-file-input>
+                  <img :src="imageUrl" style="border-radius: 5px" width="150" height="180" alt=""/>
+                </v-col>
+              </v-row>
             </v-col>
 
 
-            <v-card-actions style="margin-top: 5px">
+            <v-card-actions>
               <v-spacer></v-spacer>
 
               <v-btn
@@ -123,11 +132,11 @@
                   width="80"
                   color="#55BE4C"
                   style="margin-right: 10px"
-                  @click="createProjects()"
+                  @click="saveBookInLocalStorage()"
               >
-<span style="font-weight: bold">
-  Submit
-</span>
+              <span style="font-weight: bold">
+                Submit
+              </span>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -145,17 +154,95 @@
 <script>
 
 export default {
-  name: "CreateProject",
   data: () => ({
-    image: false,
+    text: "",
     items: undefined,
-    items_author:[]
+    image: false,
+    full_name: "",
+    image_book: undefined,
+    books: [],
+    edit_item: undefined,
+    name: undefined,
+    genre: undefined,
+    page_number: undefined,
+    isbn: undefined,
+    author: undefined,
+    items_author: undefined,
+    FieldValid: {
+      required: value => !!value || 'Field is required',
+    },
+    PicValid: [
+      value => !value || value.size < 100000 || 'Picture size should be less than 100 KB!',
+    ],
+    imageUrl: undefined
+
   }),
 //======================================================================================================================
   methods: {
+    saveBookInLocalStorage() {
+              this.items.push({
+                "id": this.edit_item.id,
+                "name": this.name,
+                "img": this.imageUrl  ,
+                "author": this.author,
+                "genre": this.genre,
+                "isbn": this.isbn,
+                "page_number": this.page_number,
+              })
+
+      // )
+      setTimeout(() => {
+        localStorage.setItem("books", JSON.stringify(this.items))
+        window.location.href = "/book"
+
+      }, 1000)
+
+    },
+//======================================================================================================================
+    createImage(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+//======================================================================================================================
+    onFileChange(file) {
+      if (!file) {
+        return;
+      }
+      this.createImage(file);
+    },
+//======================================================================================================================
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    },
+
+//======================================================================================================================
+    getData() {
+      this.items = JSON.parse(localStorage.getItem('books'))
+      for (let i in this.items) {
+        if (this.items[i].id === this.$route.params.id) {
+          this.edit_item = this.items[i]
+          this.name = this.items[i].name
+          this.genre = this.items[i].genre
+          this.author = this.items[i].author
+          this.page_number = this.items[i].page_number
+          this.isbn = this.items[i].isbn
+          this.image_book = this.items[i].img;
+          this.imageUrl = this.image_book
+          this.items.splice(this.edit_item, 1)
+        }
+      }
+    },
+//======================================================================================================================
     getItemAuthor() {
       console.log('this.items_author')
-
       this.items_author = JSON.parse(localStorage.getItem('authors'))
       console.log(this.items_author)
       console.log('this.items_author')
@@ -166,18 +253,16 @@ export default {
       this.image = window.innerWidth < 960;
       this.image = this.image !== true;
     },
-    getData() {
-      this.items = JSON.parse(this.$route.params.id)
-    }
+//======================================================================================================================
+  },
+  created() {
+    this.getData()
+    this.getItemAuthor()
   },
   mounted() {
     this.onResize();
     window.addEventListener("resize", this.onResize, {passive: true});
   },
-  created() {
-    this.getItemAuthor()
-    this.getData()
-  }
 }
 </script>
 

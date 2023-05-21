@@ -11,6 +11,10 @@
 
         <v-col md="6" cols="12">
           <v-card color="#2C2F37" style="border-radius: 6px" height="600" class="scroll">
+            <v-form
+                v-model="form"
+                @submit.prevent="onSubmit"
+            >
             <v-col md="12" cols="12">
 
 
@@ -18,6 +22,7 @@
                      cols="12"
               >
                 <v-text-field
+                    :rules="[FieldValid.required]"
                     dark
                     v-model="full_name"
                     filled
@@ -37,15 +42,17 @@
               >
 
                 <v-file-input
+                    :rules="PicValid"
                     v-model="image_author"
+                    @change="onFileChange"
                     label="File input"
+                    accept="image/png, image/jpeg, image/bmp"
                     placeholder="Select your image"
                     prepend-icon="mdi-camera"
                     dark filled dense color="#55BE4C" clearable
-                    :show-size="100"
                 >
                 </v-file-input>
-
+                <img :src="imageUrl"  style="border-radius: 5px" width="150" height="180" alt=""/>
 
               </v-col>
 
@@ -57,6 +64,8 @@
               <v-spacer></v-spacer>
 
               <v-btn
+                  :disabled="!form"
+                  :loading="loading"
                   dark
                   width="80"
                   color="#55BE4C"
@@ -68,6 +77,7 @@
               </span>
               </v-btn>
             </v-card-actions>
+            </v-form>
           </v-card>
         </v-col>
         <v-col md="6" cols="12">
@@ -89,6 +99,15 @@ export default {
     full_name: "",
     image_author: undefined,
     authors: [],
+    form: false,
+    imageUrl:undefined,
+    loading: false,
+    FieldValid: {
+      required: value => !!value || 'Field is required',
+    },
+    PicValid: [
+      value => !value  || value.size < 100000 || 'Picture size should be less than 100 KB!',
+    ],
 
   }),
 //======================================================================================================================
@@ -105,12 +124,11 @@ export default {
       )
       setTimeout(() => {
         localStorage.setItem("authors", JSON.stringify(this.authors))
-
+        window.location.href = "/"
       }, 1000)
 
     },
-
-
+//======================================================================================================================
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -119,7 +137,27 @@ export default {
         reader.onerror = error => reject(error);
       });
     },
-
+//======================================================================================================================
+    createImage(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+//======================================================================================================================
+    onFileChange(file) {
+      if (!file) {
+        return;
+      }
+      this.createImage(file);
+    },
+//======================================================================================================================
+    onSubmit() {
+      if (!this.form) return
+      this.loading = true
+      setTimeout(() => (this.loading = false), 2000)
+    },
 //======================================================================================================================
     getItemLocalStorage() {
       let getItem = JSON.parse(localStorage.getItem('authors'))
@@ -130,7 +168,6 @@ export default {
         }
       }
     },
-
 //======================================================================================================================
     onResize() {
       this.image = window.innerWidth < 960;
@@ -138,7 +175,6 @@ export default {
     },
 //======================================================================================================================
   },
-
   mounted() {
     this.onResize();
     window.addEventListener("resize", this.onResize, {passive: true});

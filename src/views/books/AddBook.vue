@@ -11,6 +11,10 @@
 
         <v-col md="6" cols="12">
           <v-card color="#2C2F37" style="border-radius: 6px" height="600" class="scroll">
+            <v-form
+                v-model="form"
+                @submit.prevent="onSubmit"
+            >
             <v-col md="12" cols="12">
 
 
@@ -19,6 +23,7 @@
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
                       v-model="name"
                       filled
@@ -35,6 +40,7 @@
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
                       v-model="genre"
                       filled
@@ -51,11 +57,31 @@
 
 
               <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
+                <v-col md="4"
                        cols="12"
                 >
                   <v-text-field
+                      :rules="[FieldValid.required]"
                       dark
+                      type="number"
+                      v-model="page_number"
+                      filled
+                      label="Page Number"
+                      dense
+                      color="#55BE4C"
+
+                  >
+
+                  </v-text-field>
+
+                </v-col>
+                <v-col md="4"
+                       cols="12"
+                >
+                  <v-text-field
+                      :rules="[FieldValid.required]"
+                      dark
+                      type="number"
                       v-model="isbn"
                       filled
                       label="Isbn"
@@ -67,11 +93,12 @@
                   </v-text-field>
 
                 </v-col>
-                <v-col md="6"
+                <v-col md="4"
                        cols="12"
                 >
 
                   <v-autocomplete
+                      :rules="[FieldValid.required]"
                       v-model="author"
                       :items="items_author"
                       item-text="full_name"
@@ -86,38 +113,27 @@
 
               </v-row>
 
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
+              <v-row  justify="center" align="center">
+
+
+                <v-col md="12"
                        cols="12"
                 >
-                  <v-text-field
-                      dark
-                      v-model="page_number"
-                      filled
-                      label="Page Number"
-                      dense
-                      color="#55BE4C"
 
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-
-                <v-col md="6"
-                       cols="12"
-                >
 
                   <v-file-input
+                      :rules="PicValid"
                       v-model="image_book"
-                      accept="image/png, image/jpeg, image/bmp"
+                      @change="onFileChange"
                       label="File input"
+                      accept="image/png, image/jpeg, image/bmp"
                       placeholder="Select your image"
                       prepend-icon="mdi-camera"
                       dark filled dense color="#55BE4C" clearable
-                      :show-size="100"
+                      show-size
                   >
                   </v-file-input>
+                  <img :src="imageUrl" style="border-radius: 5px" width="150" height="180" alt=""/>
 
 
                 </v-col>
@@ -127,10 +143,12 @@
             </v-col>
 
 
-            <v-card-actions style="margin-top: 5px">
+            <v-card-actions>
               <v-spacer></v-spacer>
 
               <v-btn
+                  :disabled="!form"
+                  :loading="loading"
                   dark
                   width="80"
                   color="#55BE4C"
@@ -142,7 +160,9 @@
               </span>
               </v-btn>
             </v-card-actions>
+            </v-form>
           </v-card>
+
         </v-col>
         <v-col md="6" cols="12">
           <img v-if="image" loading="lazy" style="margin-left: 7%" width="90%" height="600"
@@ -171,6 +191,16 @@ export default {
     image_book: undefined,
     items_author: [],
     books: [],
+    form: false,
+    imageUrl:undefined,
+    loading: false,
+    FieldValid: {
+      required: value => !!value || 'Field is required',
+    },
+    PicValid: [
+
+      value => !value  || value.size < 100000 || 'Picture size should be less than 100 KB!',
+    ],
 
   }),
 //======================================================================================================================
@@ -183,6 +213,7 @@ export default {
         reader.onerror = error => reject(error);
       });
     },
+//======================================================================================================================
     saveBookInLocalStorage() {
       this.getBase64(this.image_book).then(
           img => this.books.push({
@@ -197,8 +228,32 @@ export default {
       );
       setTimeout(() => {
         localStorage.setItem("books", JSON.stringify(this.books))
-
+        window.location.href = "/book"
       }, 1000)
+    },
+//======================================================================================================================
+    createImage(file) {
+      const reader = new FileReader();
+
+      reader.onload = e => {
+        this.imageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+//======================================================================================================================
+    onFileChange(file) {
+      if (!file) {
+        return;
+      }
+      this.createImage(file);
+    },
+//======================================================================================================================
+    onSubmit() {
+      if (!this.form) return
+
+      this.loading = true
+
+      setTimeout(() => (this.loading = false), 2000)
     },
 
 //======================================================================================================================
@@ -210,12 +265,9 @@ export default {
         }
       }
     },
-
-
 //======================================================================================================================
     getItemAuthor() {
       console.log('this.items_author')
-
       this.items_author = JSON.parse(localStorage.getItem('authors'))
       console.log(this.items_author)
       console.log('this.items_author')

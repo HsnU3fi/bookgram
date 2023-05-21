@@ -40,9 +40,12 @@
             :search="search"
             color="#55BE4C"
             loading-text="loading...."
-            dark
             hide-default-footer
+            @page-count="pageCount = $event"
+            :page.sync="page"
+            dark
         >
+
           <template v-slot:top>
             <v-text-field
                 v-model="search"
@@ -88,6 +91,11 @@
           </template>
 
         </v-data-table>
+        <v-pagination
+            v-model="page"
+            :length="pageCount"
+            color="#55BE4C"
+        ></v-pagination>
       </v-col>
       <v-row justify="center">
 
@@ -99,7 +107,7 @@
         >
           <v-card color="#2C2F37">
             <v-row justify="start" align="start">
-              <img loading="lazy" style="margin-left: 7%;padding-top: 20px" width="150" height="200"
+              <img loading="lazy" style="margin-left: 7%;padding-top: 20px;border-radius: 5px" width="150" height="200"
                    :src="view_item.profile_picture"
                    alt="">
             </v-row>
@@ -179,16 +187,22 @@
         </v-row>
       </v-row>
     </v-container>
+    <loading1 :value="overlay"/>
+
   </div>
 </template>
 
 <script>
+import Loading1 from "@/components/loading/Loding";
 
 
 export default {
+  components: {Loading1},
 
   data() {
     return {
+      page: 1,
+      pageCount: 0,
       search: '',
       items: undefined,
       dialog: false,
@@ -196,7 +210,8 @@ export default {
       delete_item: '',
       view_item: '',
       no_data: false,
-      no_data_table:true
+      no_data_table: true,
+      overlay: true
     }
   },
   computed: {
@@ -223,37 +238,42 @@ export default {
     editItem(item) {
       window.location.href = "edit-authors/" + item.id
     },
+//======================================================================================================================
     viewItem(item) {
       this.view_item = item
       this.dialog = true
-
     },
+//======================================================================================================================
     deleteItem(item) {
       this.dialogDelete = true
       this.delete_item = item
     },
+//======================================================================================================================
     acceptDelete() {
       this.items.splice(this.delete_item, 1)
-      console.log(typeof this.items
-      )
-
+      console.log(typeof this.items)
       localStorage.setItem("authors", JSON.stringify(this.items));
       this.dialogDelete = false
       this.getItemLocalStorage()
     },
-
+//======================================================================================================================
     getItemLocalStorage() {
       this.items = JSON.parse(localStorage.getItem('authors'))
       if (this.items === null || Object.keys(this.items).length === 0) {
         this.no_data = true
-        this.no_data_table=false
+        this.no_data_table = false
+
       }
     },
-
-
+//======================================================================================================================
   },
   created() {
     this.getItemLocalStorage()
+    setTimeout(() => {
+      this.overlay = false
+    }, 3000)
+
+
   }
 }
 </script>

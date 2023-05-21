@@ -11,63 +11,70 @@
 
         <v-col md="6" cols="12">
           <v-card color="#2C2F37" style="border-radius: 6px" height="600" class="scroll">
-            <v-col md="12" cols="12">
+
+              <v-col md="12" cols="12">
 
 
-              <v-col md="12"
-                     cols="12"
-              >
-                <v-text-field
+                <v-col md="12"
+                       cols="12"
+                >
+                  <v-text-field
+                      :rules="[FieldValid.required]"
+                      dark
+                      v-model="full_name"
+                      filled
+                      label="Full Name"
+                      dense
+                      color="#55BE4C"
+
+                  >
+
+                  </v-text-field>
+
+                </v-col>
+
+
+                <v-col md="12"
+                       cols="12"
+                >
+
+                  <v-file-input
+                      :rules="PicValid"
+                      v-model="image_author"
+                      @change="onFileChange"
+                      label="File input"
+                      accept="image/png, image/jpeg, image/bmp"
+                      placeholder="Select your image"
+                      prepend-icon="mdi-camera"
+                      dark filled dense color="#55BE4C" clearable
+                  >
+                  </v-file-input>
+                  <img :src="imageUrl" style="border-radius: 5px" width="150" height="180" alt=""/>
+
+
+
+                </v-col>
+
+
+              </v-col>
+
+
+              <v-card-actions style="margin-top: 5px">
+                <v-spacer></v-spacer>
+
+                <v-btn
+
                     dark
-                    v-model="full_name"
-                    filled
-                    label="Full Name"
-                    dense
+                    width="80"
                     color="#55BE4C"
-
+                    style="margin-right: 10px"
+                    @click="saveAuthorInLocalStorage()"
                 >
-
-                </v-text-field>
-
-              </v-col>
-
-
-              <v-col md="12"
-                     cols="12"
-              >
-
-                <v-file-input
-                    v-model="image_author"
-                    label="File input"
-                    placeholder="Select your image"
-                    prepend-icon="mdi-camera"
-                    dark filled dense color="#55BE4C" clearable
-                    :show-size="100"
-                >
-                </v-file-input>
-
-
-              </v-col>
-
-
-            </v-col>
-
-
-            <v-card-actions style="margin-top: 5px">
-              <v-spacer></v-spacer>
-
-              <v-btn
-                  dark
-                  width="80"
-                  color="#55BE4C"
-                  style="margin-right: 10px"
-                  @click="saveBookInLocalStorage()"
-              >
               <span style="font-weight: bold">
                 Submit
               </span>
-              </v-btn>
-            </v-card-actions>
+                </v-btn>
+              </v-card-actions>
           </v-card>
         </v-col>
         <v-col md="6" cols="12">
@@ -90,28 +97,49 @@ export default {
     full_name: "",
     image_author: undefined,
     authors: [],
-    edit_item: undefined
+    edit_item: undefined,
+    FieldValid: {
+      required: value => !!value || 'Field is required',
+    },
+    PicValid: [
+
+      value => !value  || value.size < 100000 || 'Picture size should be less than 100 KB!',
+    ],
+    imageUrl:undefined,
+
 
   }),
+
 //======================================================================================================================
   methods: {
-    saveBookInLocalStorage() {
-      this.getBase64(this.image_author).then(
-          profile_picture =>
-              this.authors.push({
+    saveAuthorInLocalStorage() {
+              this.items.push({
                 "id": this.edit_item.id,
                 "full_name": this.full_name,
-                "profile_picture": profile_picture || "Null"
-              }),
-      )
+                "profile_picture": this.imageUrl
+              })
       setTimeout(() => {
-        localStorage.setItem("authors", JSON.stringify(this.authors))
-
+        localStorage.setItem("authors", JSON.stringify(this.items))
+        window.location.href = "/"
       }, 1000)
 
     },
-
-
+//======================================================================================================================
+    createImage(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+//======================================================================================================================
+    onFileChange(file) {
+      if (!file) {
+        return;
+      }
+      this.createImage(file);
+    },
+//======================================================================================================================
     getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -122,18 +150,15 @@ export default {
     },
 
 //======================================================================================================================
-    deleteItem() {
-      this.items.splice(this.delete_item, 1)
-
-    },
-//======================================================================================================================
     getData() {
       this.items = JSON.parse(localStorage.getItem('authors'))
       for (let i in this.items) {
         if (this.items[i].id === this.$route.params.id) {
           this.edit_item = this.items[i]
           this.full_name = this.items[i].full_name
-          this.image_author = this.items[i].image_author
+          this.image_author = this.items[i].profile_picture;
+          this.imageUrl=this.image_author
+          this.items.splice(this.edit_item, 1)
         }
       }
     },
