@@ -31,9 +31,7 @@
                     color="#55BE4C"
 
                 >
-                  <template v-slot:append>
-                    <span class="append-label">Required</span>
-                  </template>
+
                 </v-text-field>
 
               </v-col>
