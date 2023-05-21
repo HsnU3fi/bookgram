@@ -19,7 +19,6 @@
 
       <v-list-item-group
           active-class="bgsidebar"
-          v-model="selectItem"
           dark
       >
         <v-list-item
@@ -70,20 +69,12 @@ export default {
   },
   data() {
     return {
-      selectItem: null,
       flagList: true
     }
   },
 
 //======================================================================================================================
-  mounted() {
-    const pathname = window.location.pathname;
-    if (pathname === "/" || pathname === "/add-authors" || pathname === "/edit-authors") {
-      this.selectItem = 0;
-    } else if (pathname === "/book" || pathname === "/add-book" || pathname === "/edit-book") {
-      this.selectItem = 1;
-    }
-  },
+
 
 
 }

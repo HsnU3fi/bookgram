@@ -250,12 +250,9 @@ export default {
 //======================================================================================================================
     onSubmit() {
       if (!this.form) return
-
       this.loading = true
-
       setTimeout(() => (this.loading = false), 2000)
     },
-
 //======================================================================================================================
     getItemLocalStorage() {
       let getItem = JSON.parse(localStorage.getItem('books'))

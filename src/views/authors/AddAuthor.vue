@@ -31,7 +31,9 @@
                     color="#55BE4C"
 
                 >
-
+                  <template v-slot:append>
+                    <span class="append-label">Required</span>
+                  </template>
                 </v-text-field>
 
               </v-col>
@@ -51,6 +53,7 @@
                     prepend-icon="mdi-camera"
                     dark filled dense color="#55BE4C" clearable
                 >
+
                 </v-file-input>
                 <img :src="imageUrl"  style="border-radius: 5px" width="150" height="180" alt=""/>
 

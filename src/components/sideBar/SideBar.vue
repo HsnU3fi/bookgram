@@ -37,7 +37,7 @@
       <v-list-item>
         <div style="height: 30px" />
       </v-list-item>
-      <v-list-item-group active-class="bgsidebar" v-model="selectItem" dark>
+      <v-list-item-group active-class="bgsidebar"  dark>
         <v-list nav dense>
 
           <v-list-item
@@ -81,20 +81,12 @@ export default {
   },
   data() {
     return {
-      selectItem: null,
       drawer: true,
       flagList: true,
     };
   },
   //======================================================================================================================
-  mounted() {
-    const pathname = window.location.pathname;
-    if (pathname === "/" || pathname === "/add-authors" || pathname === "/edit-authors") {
-      this.selectItem = 0;
-    } else if (pathname === "/book" || pathname === "/add-book" || pathname === "/edit-book") {
-      this.selectItem = 1;
-    }
-  },
+
 };
 </script>
 <style lang="scss">
