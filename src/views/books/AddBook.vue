@@ -15,151 +15,151 @@
                 v-model="form"
                 @submit.prevent="onSubmit"
             >
-            <v-col md="12" cols="12">
+              <v-col md="12" cols="12">
 
 
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      :rules="[FieldValid.required]"
-                      dark
-                      v-model="name"
-                      filled
-                      label="Name"
-                      dense
-                      color="#55BE4C"
+                <v-row style="padding-top: 30px" justify="center" align="center">
+                  <v-col md="6"
+                         cols="12"
+                  >
+                    <v-text-field
+                        :rules="[FieldValid.required]"
+                        dark
+                        v-model="name"
+                        filled
+                        label="Name"
+                        dense
+                        color="#55BE4C"
 
+                    >
+
+                    </v-text-field>
+
+                  </v-col>
+                  <v-col md="6"
+                         cols="12"
+                  >
+                    <v-text-field
+                        :rules="[FieldValid.required]"
+                        dark
+                        v-model="genre"
+                        filled
+                        label="Genre"
+                        dense
+                        color="#55BE4C"
+
+                    >
+
+                    </v-text-field>
+                  </v-col>
+
+                </v-row>
+
+
+                <v-row style="padding-top: 30px" justify="center" align="center">
+                  <v-col md="4"
+                         cols="12"
+                  >
+                    <v-text-field
+                        :rules="[FieldValid.required]"
+                        dark
+                        type="number"
+                        v-model="page_number"
+                        filled
+                        label="Page Number"
+                        dense
+                        color="#55BE4C"
+
+                    >
+
+                    </v-text-field>
+
+                  </v-col>
+                  <v-col md="4"
+                         cols="12"
+                  >
+                    <v-text-field
+                        :rules="[FieldValid.required]"
+                        dark
+                        type="number"
+                        v-model="isbn"
+                        filled
+                        label="Isbn"
+                        dense
+                        color="#55BE4C"
+
+                    >
+
+                    </v-text-field>
+
+                  </v-col>
+                  <v-col md="4"
+                         cols="12"
                   >
 
-                  </v-text-field>
+                    <v-autocomplete
+                        :rules="[FieldValid.required]"
+                        v-model="author"
+                        :items="items_author"
+                        item-text="full_name"
+                        item-value="full_name"
+                        dense
+                        dark
+                        filled
+                        label="Author"
+                    ></v-autocomplete>
 
-                </v-col>
-                <v-col md="6"
-                       cols="12"
-                >
-                  <v-text-field
-                      :rules="[FieldValid.required]"
-                      dark
-                      v-model="genre"
-                      filled
-                      label="Genre"
-                      dense
-                      color="#55BE4C"
+                  </v-col>
 
+                </v-row>
+
+                <v-row justify="center" align="center">
+
+
+                  <v-col md="12"
+                         cols="12"
                   >
 
-                  </v-text-field>
-                </v-col>
 
-              </v-row>
+                    <v-file-input
+                        :rules="PicValid"
+                        v-model="image_book"
+                        @change="onFileChange"
+                        label="File input"
+                        accept="image/png, image/jpeg, image/bmp"
+                        placeholder="Select your image"
+                        prepend-icon="mdi-camera"
+                        dark filled dense color="#55BE4C" clearable
+                        show-size
+                    >
+                    </v-file-input>
+                    <img :src="imageUrl" style="border-radius: 5px" width="150" height="180" alt=""/>
 
 
-              <v-row style="padding-top: 30px" justify="center" align="center">
-                <v-col md="4"
-                       cols="12"
+                  </v-col>
+
+                </v-row>
+
+              </v-col>
+
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    :disabled="!form"
+                    :loading="loading"
+                    dark
+                    width="80"
+                    color="#55BE4C"
+                    style="margin-right: 10px"
+                    @click="saveBookInLocalStorage()"
                 >
-                  <v-text-field
-                      :rules="[FieldValid.required]"
-                      dark
-                      type="number"
-                      v-model="page_number"
-                      filled
-                      label="Page Number"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-                <v-col md="4"
-                       cols="12"
-                >
-                  <v-text-field
-                      :rules="[FieldValid.required]"
-                      dark
-                      type="number"
-                      v-model="isbn"
-                      filled
-                      label="Isbn"
-                      dense
-                      color="#55BE4C"
-
-                  >
-
-                  </v-text-field>
-
-                </v-col>
-                <v-col md="4"
-                       cols="12"
-                >
-
-                  <v-autocomplete
-                      :rules="[FieldValid.required]"
-                      v-model="author"
-                      :items="items_author"
-                      item-text="full_name"
-                      item-value="full_name"
-                      dense
-                      dark
-                      filled
-                      label="Author"
-                  ></v-autocomplete>
-
-                </v-col>
-
-              </v-row>
-
-              <v-row  justify="center" align="center">
-
-
-                <v-col md="12"
-                       cols="12"
-                >
-
-
-                  <v-file-input
-                      :rules="PicValid"
-                      v-model="image_book"
-                      @change="onFileChange"
-                      label="File input"
-                      accept="image/png, image/jpeg, image/bmp"
-                      placeholder="Select your image"
-                      prepend-icon="mdi-camera"
-                      dark filled dense color="#55BE4C" clearable
-                      show-size
-                  >
-                  </v-file-input>
-                  <img :src="imageUrl" style="border-radius: 5px" width="150" height="180" alt=""/>
-
-
-                </v-col>
-
-              </v-row>
-
-            </v-col>
-
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn
-                  :disabled="!form"
-                  :loading="loading"
-                  dark
-                  width="80"
-                  color="#55BE4C"
-                  style="margin-right: 10px"
-                  @click="saveBookInLocalStorage()"
-              >
               <span style="font-weight: bold">
                 Submit
               </span>
-              </v-btn>
-            </v-card-actions>
+                </v-btn>
+              </v-card-actions>
             </v-form>
           </v-card>
 
@@ -192,14 +192,14 @@ export default {
     items_author: [],
     books: [],
     form: false,
-    imageUrl:undefined,
+    imageUrl: undefined,
     loading: false,
     FieldValid: {
       required: value => !!value || 'Field is required',
     },
     PicValid: [
 
-      value => !value  || value.size < 100000 || 'Picture size should be less than 100 KB!',
+      value => !value || value.size < 100000 || 'Picture size should be less than 100 KB!',
     ],
 
   }),
@@ -215,6 +215,7 @@ export default {
     },
 //======================================================================================================================
     saveBookInLocalStorage() {
+      this.loading = true
       this.getBase64(this.image_book).then(
           img => this.books.push({
             "id": Math.random().toString(16).slice(2),

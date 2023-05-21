@@ -22,7 +22,7 @@
                      cols="12"
               >
                 <v-text-field
-                    :rules="[FieldValid.required]"
+                      :rules="[FieldValid.required]"
                     dark
                     v-model="full_name"
                     filled
@@ -68,6 +68,7 @@
                   :disabled="!form"
                   :loading="loading"
                   dark
+                  variant="elevated"
                   width="80"
                   color="#55BE4C"
                   style="margin-right: 10px"
@@ -77,6 +78,7 @@
                 Submit
               </span>
               </v-btn>
+
             </v-card-actions>
             </v-form>
           </v-card>
@@ -115,6 +117,7 @@ export default {
   methods: {
 
     saveBookInLocalStorage() {
+      this.loading=true
       this.getBase64(this.image_author).then(
           profile_picture =>
               this.authors.push({
